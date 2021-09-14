@@ -63,93 +63,35 @@ def parse_args():
     return args
 
 
-def info_one_step(save_path, batch_time, data_time,
-                  losses, acc, result, label, loss_class,
-                  step, epoch, loader_len, optimizer_para,
-                  total_cls_loss, correct_cnt, total_cls_cnt, correct_cls_cnt):
-
+def show_info(epoch, step, loader_len, batch_time, data_time, losses, acc, log_type, root_path):
     log_file_name = cfg.TIMESTAMP + '.log'
-    log_file_path = os.path.join(save_path, log_file_name)
+    log_file_path = os.path.join(root_path, log_file_name)
     file = open(log_file_path, 'a')
 
-    total_cls_loss += loss_class.item()
-    pts = torch.argmax(result, dim=1)
-    correct_cnt += torch.sum(label == pts).item()
-    for i in range(label.size(0)):
-        total_cls_cnt[label[i]] += 1
-        if label[i] == pts[i]:
-            correct_cls_cnt[pts[i]] += 1
-
-    # if (step + 1) % cfg.SHOW_INFO == 0:
     p_str = "-------------------------------------------------------------------"
     print(p_str)
     s_str = str(p_str) + '\n'
     file.write(str(s_str))
 
-    p_str = "===> Epoch:[{0}][{1}/{2}]".format(epoch, step + 1, loader_len)
+    p_str = "===> " + str(log_type) + " Epoch:[{0}][{1}/{2}]".format(epoch, step + 1, loader_len)
     print(p_str)
     s_str = str(p_str) + '\n'
     file.write(str(s_str))
 
-    p_str = "===> Conv lr: {} FC lr: {}".format(optimizer_para[0], optimizer_para[1])
+    p_str = "===> " + str(log_type) + " Data time:{data_time:.3f}  Batch time:{batch_time:.3f}".format(data_time=data_time.val,
+                                                                                                       batch_time=batch_time.val)
     print(p_str)
     s_str = str(p_str) + '\n'
     file.write(str(s_str))
 
-    p_str = "===> Data time:{data_time:.3f}  Batch time:{batch_time:.3f}".format(data_time=data_time.val,
-                                                                                      batch_time=batch_time.val)
+    p_str = "===> " + str(log_type) + " Loss:{loss:.5f}".format(loss=losses.avg)
     print(p_str)
     s_str = str(p_str) + '\n'
     file.write(str(s_str))
 
-    p_str = "===> Loss:{loss:.5f}".format(loss=losses.avg)
+    p_str = "===> " + str(log_type) + " Accuracy:{acc:.3f}".format(acc=acc.avg)
     print(p_str)
     s_str = str(p_str) + '\n'
     file.write(str(s_str))
-
-    p_str = "===> Accuracy:{acc:.3f}".format(acc=acc.avg)
-    print(p_str)
-    s_str = str(p_str) + '\n'
-    file.write(str(s_str))
-
-    file.close()
-
-    return total_cls_loss, correct_cnt, total_cls_cnt, correct_cls_cnt
-
-
-def info_one_epoch(save_path, total_cls_loss, correct_cnt, total_cls_cnt, correct_cls_cnt, loader_len, log_type='train'):
-
-    log_file_name = cfg.TIMESTAMP + '.log'
-    log_file_path = os.path.join(save_path, log_file_name)
-    file = open(log_file_path, 'a')
-
-    avg_cls_loss = total_cls_loss / loader_len
-    avg_acc = correct_cnt / loader_len
-
-    if log_type == 'train':
-        p_str = '===> [TRAIN] Loss: {:.3f}  Acc: {:.3f}'.format(avg_cls_loss, avg_acc)
-        print(p_str)
-        s_str = str(p_str) + '\n'
-        file.write(s_str)
-    if log_type == 'val':
-        p_str = '===> [VAL] Loss: {:.3f}  Acc: {:.3f}'.format(avg_cls_loss, avg_acc)
-        print(p_str)
-        s_str = str(p_str) + '\n'
-        file.write(s_str)
-
-    p_str = '===> Correct classify count: ', correct_cls_cnt
-    print(p_str)
-    s_str = str(p_str) + '\n'
-    file.write(s_str)
-
-    p_str = '===> Total classify count: ', total_cls_cnt
-    print(p_str)
-    s_str = str(p_str) + '\n'
-    file.write(s_str)
-
-    p_str = '===> Total classify acc: ', correct_cls_cnt / total_cls_cnt
-    print(p_str)
-    s_str = str(p_str) + '\n'
-    file.write(s_str)
 
     file.close()

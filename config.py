@@ -1,6 +1,7 @@
 import os
 import time
 from easydict import EasyDict as edict
+import wandb
 
 
 __C = edict()
@@ -11,13 +12,13 @@ __C.TIMESTAMP = time.strftime("%Y_%m_%d_%H:%M:%S", time.localtime())  # TODO: se
 __C.MODEL_NAME = 'c3d'  # TODO: set training model
 __C.MODEL_LIST = ['c3d', 'r3d', 'r21d']
 __C.SAVE_PATH = '/data/guojie'
-__C.GPUS = 4  # TODO: set the count of used GPU
-__C.GPU_ID = '0,1,2,3'  # TODO: set available gpus id
+__C.GPUS = 2  # TODO: set the count of used GPU
+__C.GPU_ID = '5,7'  # TODO: set available gpus id
 __C.MULTI_GPU = True  # TODO: set use multi-gpus or not
 __C.RANDOM_SEED = 632  # TODO: set random seed
 __C.SHOW_INFO = 20  # TODO: set how many steps pass that show information
 __C.CHECK_EPOCH = 20  # TODO: set how many epochs pass that save checkpoint
-__C.APEX = False  # TODO: set use APEX to accelerate training or not
+__C.APEX = True  # TODO: set use APEX to accelerate training or not
 
 
 # train setting
@@ -53,5 +54,6 @@ __C.DATASET.NAME = "UCF-101-origin"  # TODO: set used dataset
 __C.DATASET.CLASS_NUM = 8
 __C.DATASET.VAL_SIZE = 800
 
-
-__C.EXP_TAG = __C.TIMESTAMP + "_" + __C.MODEL_NAME + "_" + __C.TRAIN.TYPE
+# tag: time stamp, model name, dataset name
+# __C.EXP_TAG = __C.TIMESTAMP + "_" + __C.MODEL_NAME + "_" + __C.DATASET.NAME
+__C.EXP_TAG = __C.MODEL_NAME + "_" + __C.DATASET.NAME + "_" + __C.TRAIN.TYPE
