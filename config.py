@@ -13,7 +13,7 @@ __C.MODEL_NAME = 'c3d'  # TODO: set training model
 __C.MODEL_LIST = ['c3d', 'r3d', 'r21d']
 __C.SAVE_PATH = '/data/guojie'
 __C.GPUS = 2  # TODO: set the count of used GPU
-__C.GPU_ID = '5,7'  # TODO: set available gpus id
+__C.GPU_ID = '0,5'  # TODO: set available gpus id
 __C.MULTI_GPU = True  # TODO: set use multi-gpus or not
 __C.RANDOM_SEED = 632  # TODO: set random seed
 __C.SHOW_INFO = 20  # TODO: set how many steps pass that show information
@@ -23,10 +23,10 @@ __C.APEX = True  # TODO: set use APEX to accelerate training or not
 
 # train setting
 __C.TRAIN = edict()
-__C.TRAIN.TYPE = 'SSL'  # TODO: set training type: [SSL, Finetune]
-__C.TRAIN.EPOCH = 300  # TODO: set training epoch
+__C.TRAIN.TYPE = 'Finetune'  # TODO: set training type: [SSL, Finetune]
+__C.TRAIN.EPOCH = 80  # TODO: set training epoch
 __C.TRAIN.START_EPOCH = 1  # TODO: set the strat epoch
-__C.TRAIN.BATCH_SIZE = 8  # TODO: set batch size
+__C.TRAIN.BATCH_SIZE = 32  # TODO: set batch size
 __C.TRAIN.NUM_WORKERS = 4  # TODO: set num_workers
 __C.TRAIN.LEARNING_RATE = 0.01 # TODO: set training learning rate
 __C.TRAIN.MOMENTUM = 0.9  # TODO: set momentum parameter
@@ -51,7 +51,7 @@ __C.DATASET = edict()
 __C.DATASET.LOAD_TYPE = 'DataLoaderX'  # TODO: set type of data loader, e.g., normal or DataLoaderX
 __C.DATASET.ROOT_PATH = "/home/guojie/Dataset"  # TODO: set dataset root path
 __C.DATASET.NAME = "UCF-101-origin"  # TODO: set used dataset
-__C.DATASET.CLASS_NUM = 8
+__C.DATASET.CLASS_NUM = 101
 __C.DATASET.VAL_SIZE = 800
 
 # tag: time stamp, model name, dataset name

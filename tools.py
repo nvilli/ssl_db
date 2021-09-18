@@ -95,3 +95,41 @@ def show_info(epoch, step, loader_len, batch_time, data_time, losses, acc, log_t
     file.write(str(s_str))
 
     file.close()
+
+
+def load_pretrained_weights(weight_path):
+
+    adjusted_weights_temp = {}
+    adjusted_weights = {}
+    pretrained_weights = torch.load(weight_path, map_location='cpu')
+    for name, params in pretrained_weights.items():
+        if 'module' in name:
+            name = name[name.find('.')+1:]
+            adjusted_weights_temp[name] = params
+
+    for name, params in adjusted_weights_temp.items():
+        if 'linear' in name:
+            pass
+        else:
+            adjusted_weights[name] = params
+
+    # for name, params in adjusted_weights.items():
+        # print(name)
+
+    return adjusted_weights
+
+def get_model_path():
+    model_path = str(os.path.join(cfg.SAVE_PATH, cfg.EXP_TAG))
+    model_path = model_path.replace('Finetune', 'SSL')
+    pkgs = []
+    for pkg in os.listdir(model_path):
+        pkgs.append(pkg)
+    model_weight_path = os.path.join(model_path, max(pkgs))
+
+    best_model_path = None
+    for file_name in os.listdir(model_weight_path):
+        if 'best' in file_name:
+            best_model_path = file_name
+    best_model_path = os.path.join(model_weight_path, best_model_path)
+
+    return best_model_path
